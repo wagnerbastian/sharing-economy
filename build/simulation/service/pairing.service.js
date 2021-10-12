@@ -43,7 +43,6 @@ var PairingService = /** @class */ (function () {
         var agentA = agentsIn[Math.floor(Math.random() * agentsIn.length)];
         var agents = agentsIn.filter(function (agent) { return agentA.id !== agent.id; });
         var _loop_1 = function (index) {
-            process.stdout.write("|");
             var id = this_1.networkService.findNodeIDWithDistanceOf(agentA, agents, index);
             if (id != null) {
                 return { value: {
