@@ -2,33 +2,28 @@
   "simulationInfo": {
     "strategyDistribution": {
       "initial": {
-        "tc": 2,
-        "tp": 3,
-        "uc": 2,
-        "up": 3
+        "tc": 12,
+        "tp": 13,
+        "uc": 12,
+        "up": 13
       },
       "final": [{
-        "tc": 1,
-        "tp": 0,
-        "uc": 3,
-        "up": 6
+        "tc": 21,
+        "tp": 8,
+        "uc": 14,
+        "up": 7
       }, {
-        "tc": 3,
-        "tp": 2,
-        "uc": 3,
-        "up": 2
-      }, {
-        "tc": 2,
-        "tp": 2,
-        "uc": 3,
-        "up": 3
-      }, {
-        "tc": 2,
-        "tp": 2,
-        "uc": 1,
-        "up": 5
+        "tc": 18,
+        "tp": 8,
+        "uc": 17,
+        "up": 7
       }]
-    }
+    },
+    "start": "2021-10-12T21:52:28.706Z",
+    "end": "2021-10-12T21:52:29.549Z",
+    "duration": 0.843,
+    "durationMinutes": 0.01405,
+    "durationHours": 0.00023416666666666668
   },
   "possibleWealth": {
     "total": {
@@ -36,8 +31,8 @@
       "min": 0
     },
     "individual": {
-      "max": 8000,
-      "min": -4000
+      "max": 4000,
+      "min": -2000
     }
   },
   "strategyDistribution": []

@@ -5,7 +5,12 @@ export interface PopulationInfo {
     strategyDistribution: {
       initial: StrategyDistribution,
       final: StrategyDistribution[]
-    }
+    },
+    start: string,
+    end: string,
+    duration: number,
+    durationMinutes: number,
+    durationHours: number
   },
   possibleWealth: {
     total: {

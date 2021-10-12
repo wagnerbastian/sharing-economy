@@ -119,8 +119,13 @@ export class Simulation {
             // Ende des Durchlaufs
             console.log('\n', this.strategyService.getStrategyDistribution(agents));
             this.populationInfo.simulationInfo.strategyDistribution.final.push(this.strategyService.getStrategyDistribution(agents))
-            this.logger.writeFile(this.populationInfo);
         }
+        this.populationInfo.simulationInfo.end = new Date().toISOString();
+        this.populationInfo.simulationInfo.duration = (new Date(this.populationInfo.simulationInfo.end).getTime() - new Date(this.populationInfo.simulationInfo.start).getTime()) / 1000;
+
+        this.populationInfo.simulationInfo.durationMinutes = this.populationInfo.simulationInfo.duration / 60;
+        this.populationInfo.simulationInfo.durationHours = this.populationInfo.simulationInfo.durationMinutes / 60;
+        this.logger.writeFile(this.populationInfo);
     }
 
     /**
