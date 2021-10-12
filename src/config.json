@@ -1,0 +1,25 @@
+{
+    "simulationData": {
+        "agents": 1000,
+        "steps": 500,
+        "repititions": 1
+    },
+    "payoff": {
+        "r": 39,
+        "temp": 40,
+        "s": 20,
+        "x": 10
+    },
+    "strategy": {
+        "decisionMethod": "original-wealth",
+        "distribution": [
+            0.25,
+            0.5,
+            0.75,
+            1
+        ]
+    },
+    "network": {
+        "pairingMethod": "simple"
+    }
+}
