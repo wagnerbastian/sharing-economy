@@ -1,5 +1,5 @@
 export type DecisionMethod = 'best' | 'original-wealth';
-export type PairingMethod = 'simple';
+export type PairingMethod = 'simple' | 'dijkstra';
 
 export interface Config {
     simulationData: {
@@ -18,7 +18,15 @@ export interface Config {
         distribution: number[]
     },
     network: {
-        pairingMethod: PairingMethod
+        pairingMethod: PairingMethod,
+        enabled: boolean,
+        minNeighbours: number,
+        maxNeighbours: number,
+        firstStepSubsetModifier: number,
+        dijkstra: {
+            preferredDistance: number,
+            maxDistance: number
+        }
     }
 }
 

@@ -1,3 +1,4 @@
+const fs = require("fs");
 export class Logger {
 
     system(data: string): void {
@@ -6,9 +7,9 @@ export class Logger {
 
 
     logStep(step: number): void {
-        if (step === 0) {
+        if (step === 1) {
             console.log('');
-            process.stdout.write(`Calculating steps:`);
+            process.stdout.write(`Calculating steps:.`);
         }
 
         if (step % 10 === 0) {
@@ -18,5 +19,9 @@ export class Logger {
         if (step % 100 === 0) {
             process.stdout.write(`${step}`);
         }
+    }
+
+    writeFile(data: any): void {
+        fs.writeFile("run.json", JSON.stringify(data), function(){})
     }
 }
