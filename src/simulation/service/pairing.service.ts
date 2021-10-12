@@ -44,6 +44,7 @@ export class PairingService {
         const agents = agentsIn.filter(agent => agentA.id !== agent.id);
 
         for (let index = preferredDistance; index > 0; index--) {
+          process.stdout.write(`|`);
             const id = this.networkService.findNodeIDWithDistanceOf(agentA, agents, index);
 
             if (id != null) {

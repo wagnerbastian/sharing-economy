@@ -26,7 +26,6 @@ var data_service_1 = require("./service/data.service");
 var pairing_service_1 = require("./service/pairing.service");
 var strategy_service_1 = require("./service/strategy.service");
 var logger_1 = require("./util/logger");
-var cliSpinners = require('cli-spinners');
 var Simulation = /** @class */ (function () {
     function Simulation() {
         this.logger = new logger_1.Logger();
@@ -43,7 +42,6 @@ var Simulation = /** @class */ (function () {
     Simulation.prototype.runSimulation = function () {
         this.logger.system('Starting Simulation');
         this.networkService.createGraph(this.agents);
-        console.log(cliSpinners.dots);
         // test
         console.log(this.networkService.getDistancesForAgents(this.agents[2], [this.agents[80], this.agents[45]]));
         // ___

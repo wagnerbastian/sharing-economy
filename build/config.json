@@ -1,6 +1,6 @@
 {
     "simulationData": {
-        "agents": 100,
+        "agents": 500,
         "steps": 5000,
         "repititions": 1
     },
