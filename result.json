@@ -1,0 +1,44 @@
+{
+  "simulationInfo": {
+    "strategyDistribution": {
+      "initial": {
+        "tc": 2,
+        "tp": 3,
+        "uc": 2,
+        "up": 3
+      },
+      "final": [{
+        "tc": 1,
+        "tp": 0,
+        "uc": 3,
+        "up": 6
+      }, {
+        "tc": 3,
+        "tp": 2,
+        "uc": 3,
+        "up": 2
+      }, {
+        "tc": 2,
+        "tp": 2,
+        "uc": 3,
+        "up": 3
+      }, {
+        "tc": 2,
+        "tp": 2,
+        "uc": 1,
+        "up": 5
+      }]
+    }
+  },
+  "possibleWealth": {
+    "total": {
+      "max": 0,
+      "min": 0
+    },
+    "individual": {
+      "max": 8000,
+      "min": -4000
+    }
+  },
+  "strategyDistribution": []
+}

@@ -22,6 +22,9 @@ var Logger = /** @class */ (function () {
     };
     Logger.prototype.writeFile = function (data) {
         fs.writeFile("run.json", JSON.stringify(data), function () { });
+        var result = JSON.parse(JSON.stringify(data));
+        result.strategyDistribution = [];
+        fs.writeFile("result.json", JSON.stringify(result), function () { });
     };
     return Logger;
 }());

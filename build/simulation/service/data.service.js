@@ -101,6 +101,12 @@ var DataService = /** @class */ (function () {
     };
     DataService.prototype.createPopulationInfo = function () {
         return {
+            simulationInfo: {
+                strategyDistribution: {
+                    initial: null,
+                    final: []
+                }
+            },
             possibleWealth: {
                 total: {
                     max: 0,

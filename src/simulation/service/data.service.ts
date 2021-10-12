@@ -89,6 +89,12 @@ export class DataService {
 
     createPopulationInfo(): PopulationInfo {
         return {
+          simulationInfo: {
+            strategyDistribution: {
+              initial: null,
+              final: []
+            }
+          },
             possibleWealth: {
                 total: {
                     max: 0,

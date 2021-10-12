@@ -11,7 +11,7 @@ export class Simulation {
     config = (data as any).default as Config;
     dataService = new DataService();
     populationInfo: PopulationInfo = this.dataService.createPopulationInfo();
-    
+
     networkService = new NetworkService();
     pairingService = new PairingService(this.networkService);
     strategyService = new StrategyService(this.populationInfo);
@@ -19,7 +19,7 @@ export class Simulation {
 
     strategies: Strategy[] = this.dataService.createStrategies();
     agents: Agent[] = this.dataService.createAgents(this.strategies);
-    
+
 
     constructor() {
         this.runSimulation();
@@ -30,10 +30,10 @@ export class Simulation {
         this.logger.system('Starting Simulation');
         this.networkService.createGraph(this.agents);
 
-        // test
+        this.populationInfo.simulationInfo.strategyDistribution.initial = this.strategyService.getStrategyDistribution(this.agents);
 
-        console.log(this.networkService.getDistancesForAgents(this.agents[2], [this.agents[80], this.agents[45]]));
-        
+        // console.log(this.networkService.getDistancesForAgents(this.agents[2], [this.agents[80], this.agents[45]]));
+
         // ___
         for (let repitition = 1; repitition <= this.config.simulationData.repititions; repitition++) {
             this.logger.system('Starting Repition ' + repitition)
@@ -43,8 +43,8 @@ export class Simulation {
             for (let step = 1; step <= this.config.simulationData.steps; step++) {
                 // console.log("- Starting Step", step);
                 this.makeAllAgentsAvailableForTrading(agents);
-                const agentsAtTheBeginningOfTheStep: Agent[] = JSON.parse(JSON.stringify(agents)) as Agent[];                
-                
+                const agentsAtTheBeginningOfTheStep: Agent[] = JSON.parse(JSON.stringify(agents)) as Agent[];
+
 
                 // 2 Agenten zum Handeln suchen
                 // Strategie auswählen
@@ -60,7 +60,7 @@ export class Simulation {
                             if (agentsToTrade.agentA == null || agentsToTrade.agentB == null) {
                                 break;
                             }
-                            
+
                             // Handel
                             this.trade(agentsToTrade.agentA, agentsToTrade.agentB);
 
@@ -78,14 +78,14 @@ export class Simulation {
                         break;
                     }
                     case 'dijkstra': {
-                        
+
 
                         let availableAgentsCounter = agents.length;
                         while (availableAgentsCounter > 3) {
                             // solange wie es Paare gibt die Handeln können, werden sie gesucht und es wird gehandelt.
                             let availableAgents = agents.filter(agent => !agent.didTradeInThisStep);
                             availableAgentsCounter = availableAgents.length;
-                            
+
                             let agentsToTrade = this.pairingService.dijkstraPair(availableAgents, step);
                             if (agentsToTrade.agentA == null || agentsToTrade.agentB == null) {
                                 break;
@@ -118,6 +118,7 @@ export class Simulation {
             }
             // Ende des Durchlaufs
             console.log('\n', this.strategyService.getStrategyDistribution(agents));
+            this.populationInfo.simulationInfo.strategyDistribution.final.push(this.strategyService.getStrategyDistribution(agents))
             this.logger.writeFile(this.populationInfo);
         }
     }
@@ -144,7 +145,7 @@ export class Simulation {
         agentB.wealth += payoffB;
         agentB.payoffHistory.push(payoffB);
         agentB.didTradeInThisStep = true;
-        
+
     }
 
     updatePopulationInfo(step: number, agents: Agent[], repition: number): void {
@@ -178,6 +179,6 @@ export class Simulation {
     }
 
 
-    
+
 
 }

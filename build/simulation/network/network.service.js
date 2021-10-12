@@ -107,7 +107,7 @@ var NetworkService = /** @class */ (function () {
                 result.push(dis);
             }
             else {
-                // neu... 
+                // neu...
                 var distance = _this.dijkstra.findShortestPath(_this.distanceGraph, from.id, t.id);
                 var d = {
                     to: t.id,
