@@ -2,6 +2,10 @@ import { StrategyDistribution } from "./strategy";
 
 export interface PopulationInfo {
   simulationInfo: {
+    name: string,
+    agents: number,
+    steps: number,
+    repititions: number,
     strategyDistribution: {
       initial: StrategyDistribution,
       final: StrategyDistribution[]

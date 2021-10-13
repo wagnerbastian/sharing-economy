@@ -12,6 +12,8 @@ export class NetworkService {
     distanceGraph: any;
     distances: Distance[] = [];
 
+    usedSavedDistance = 0;
+
     dataService = new DataService();
 
     createGraph(agents: Agent[]): void {
@@ -98,6 +100,7 @@ export class NetworkService {
             });
 
             if (dis) {
+                this.usedSavedDistance++;
                 result.push(dis);
             } else {
                 // neu...
@@ -129,5 +132,12 @@ export class NetworkService {
                 return dis[0].to;
             }
         }
+    }
+
+    getNeighbourIDs(id: number): number[] {
+        const neighbours = this.graph.find(a => a.id === id).neighbours;
+        const result: number[] = [];
+        neighbours.forEach(n => {result.push(n.id)});
+        return result;
     }
 }

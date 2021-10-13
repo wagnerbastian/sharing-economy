@@ -1,10 +1,25 @@
 import * as data from '../config.json';
-import { Agent, Config, PopulationInfo, Strategy } from './module';
-import { NetworkService } from './network/network.service';
-import { DataService } from './service/data.service';
-import { PairingService } from './service/pairing.service';
-import { StrategyService } from './service/strategy.service';
-import { Logger } from './util/logger';
+import {
+    Agent,
+    Config,
+    PopulationInfo,
+    Strategy
+} from './module';
+import {
+    NetworkService
+} from './network/network.service';
+import {
+    DataService
+} from './service/data.service';
+import {
+    PairingService
+} from './service/pairing.service';
+import {
+    StrategyService
+} from './service/strategy.service';
+import {
+    Logger
+} from './util/logger';
 
 export class Simulation {
     logger = new Logger();
@@ -27,7 +42,7 @@ export class Simulation {
 
 
     runSimulation(): void {
-        this.logger.system('Starting Simulation');
+        this.logger.system(`Starting Simulation: ${this.config.simulationData.name} with ${this.config.simulationData.agents} agents`);
         this.networkService.createGraph(this.agents);
 
         this.populationInfo.simulationInfo.strategyDistribution.initial = this.strategyService.getStrategyDistribution(this.agents);
@@ -88,23 +103,72 @@ export class Simulation {
 
                             let agentsToTrade = this.pairingService.dijkstraPair(availableAgents, step);
                             if (agentsToTrade.agentA == null || agentsToTrade.agentB == null) {
-                                break;
+                                // es wurde kein gültiges Paar gefunden, Agent bricht den Handel ab.
+                                if (agentsToTrade.agentA) {
+                                    agentsToTrade.agentA.didTradeInThisStep = true;
+                                    agentsToTrade.agentA.payoffHistory.push(0)
+                                } else {
+                                    agentsToTrade.agentB.didTradeInThisStep = true;
+                                    agentsToTrade.agentB.payoffHistory.push(0)
+                                }
+                            } else {
+                                // Handel
+                                this.trade(agentsToTrade.agentA, agentsToTrade.agentB);
+
+                                // strategiewechsel berechnen...
+                                if (this.strategyService.computeStrategySwitch(agentsToTrade.agentA, agentsToTrade.agentB)) {
+                                    // a switcht zu b
+                                    agentsToTrade.agentA.strategy = agentsAtTheBeginningOfTheStep.find(agent => agent.id === agentsToTrade.agentB.id).strategy;
+                                }
+
+                                if (this.strategyService.computeStrategySwitch(agentsToTrade.agentB, agentsToTrade.agentA)) {
+                                    // b switcht zu a
+                                    agentsToTrade.agentB.strategy = agentsAtTheBeginningOfTheStep.find(agent => agent.id === agentsToTrade.agentA.id).strategy;
+                                }
                             }
 
-                            // Handel
-                            this.trade(agentsToTrade.agentA, agentsToTrade.agentB);
 
-                            // strategiewechsel berechnen...
-                            if (this.strategyService.computeStrategySwitch(agentsToTrade.agentA, agentsToTrade.agentB)) {
-                                // a switcht zu b
-                                agentsToTrade.agentA.strategy = agentsAtTheBeginningOfTheStep.find(agent => agent.id === agentsToTrade.agentB.id).strategy;
+
+
+                        }
+                        break;
+                    }
+
+                    case 'network': {
+                        let availableAgentsCounter = agents.length;
+                        while (availableAgentsCounter > 3) {
+                            let availableAgents = agents.filter(agent => !agent.didTradeInThisStep);
+                            availableAgentsCounter = availableAgents.length;
+                            const agentsToTrade = this.pairingService.networkPair(agents);
+
+
+                            if (agentsToTrade.agentA == null || agentsToTrade.agentB == null) {
+                                // es wurde kein gültiges Paar gefunden, Agent bricht den Handel ab.
+                                if (agentsToTrade.agentA) {
+                                    agentsToTrade.agentA.didTradeInThisStep = true;
+                                    agentsToTrade.agentA.payoffHistory.push(0)
+                                } else {
+                                    agentsToTrade.agentB.didTradeInThisStep = true;
+                                    agentsToTrade.agentB.payoffHistory.push(0)
+                                }
+
+                            } else {
+                                // Es wurde ein gültiges paar gefunden und es handelt
+                                // Handel
+                                this.trade(agentsToTrade.agentA, agentsToTrade.agentB);
+
+                                // strategiewechsel berechnen...
+                                if (this.strategyService.computeStrategySwitch(agentsToTrade.agentA, agentsToTrade.agentB)) {
+                                    // a switcht zu b
+                                    agentsToTrade.agentA.strategy = agentsAtTheBeginningOfTheStep.find(agent => agent.id === agentsToTrade.agentB.id).strategy;
+                                }
+
+                                if (this.strategyService.computeStrategySwitch(agentsToTrade.agentB, agentsToTrade.agentA)) {
+                                    // b switcht zu a
+                                    agentsToTrade.agentB.strategy = agentsAtTheBeginningOfTheStep.find(agent => agent.id === agentsToTrade.agentA.id).strategy;
+                                }
+
                             }
-
-                            if (this.strategyService.computeStrategySwitch(agentsToTrade.agentB, agentsToTrade.agentA)) {
-                                // b switcht zu a
-                                agentsToTrade.agentB.strategy = agentsAtTheBeginningOfTheStep.find(agent => agent.id === agentsToTrade.agentA.id).strategy;
-                            }
-
 
                         }
                         break;
@@ -126,6 +190,7 @@ export class Simulation {
         this.populationInfo.simulationInfo.durationMinutes = this.populationInfo.simulationInfo.duration / 60;
         this.populationInfo.simulationInfo.durationHours = this.populationInfo.simulationInfo.durationMinutes / 60;
         this.logger.writeFile(this.populationInfo);
+        console.log("Connections saved: ", this.networkService.distances.length, "used saved: ", this.networkService.usedSavedDistance);
     }
 
     /**

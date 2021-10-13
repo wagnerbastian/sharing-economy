@@ -1,5 +1,5 @@
 export type DecisionMethod = 'best' | 'original-wealth';
-export type PairingMethod = 'simple' | 'dijkstra';
+export type PairingMethod = 'simple' | 'dijkstra' | 'network';
 
 export interface Config {
     simulationData: {
@@ -27,6 +27,12 @@ export interface Config {
         dijkstra: {
             preferredDistance: number,
             maxDistance: number
+        },
+        networkPair: {
+            edgeWeight: number,
+            increaseFurther: boolean,
+            decreaseFurther: boolean,
+            circleAroundDistance: boolean
         }
     }
 }

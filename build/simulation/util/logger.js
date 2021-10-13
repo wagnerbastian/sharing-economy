@@ -13,11 +13,26 @@ var Logger = /** @class */ (function () {
             console.log('');
             process.stdout.write("Calculating steps:.");
         }
-        if (step % 10 === 0) {
+        else if (step < 10) {
             process.stdout.write(".");
         }
-        if (step % 100 === 0) {
+        else if (step === 10) {
             process.stdout.write("" + step);
+        }
+        else if (step < 30 && step % 2 === 0) {
+            process.stdout.write(".");
+        }
+        else if (step === 30) {
+            process.stdout.write("" + step);
+        }
+        else if (step === 50) {
+            process.stdout.write("" + step);
+        }
+        else if (step % 100 === 0) {
+            process.stdout.write("" + step);
+        }
+        else if (step % 10 === 0) {
+            process.stdout.write(".");
         }
     };
     Logger.prototype.writeFile = function (data) {

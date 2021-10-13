@@ -3,7 +3,7 @@
         "agents": 50,
         "steps": 50,
         "repititions": 1,
-        "name": ""
+        "name": "Run Tests"
     },
     "payoff": {
         "r": 39,
@@ -21,14 +21,21 @@
         ]
     },
     "network": {
-        "pairingMethod": "dijkstra",
+        "pairingMethod": "network",
         "firstStepSubsetModifier": 5,
         "enabled": false,
         "minNeighbours": 3,
         "maxNeighbours": 15,
+        
         "dijkstra": {
             "preferredDistance": 1,
             "maxDistance": 5
+        },
+        "networkPair": {
+            "edgeWeight": 0.8,
+            "increaseFurther": false,
+            "decreaseFurther": false,
+            "circleAroundDistance": true
         }
     }
 }

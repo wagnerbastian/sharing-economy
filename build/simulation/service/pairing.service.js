@@ -77,6 +77,85 @@ var PairingService = /** @class */ (function () {
         // testing
         console.log("ended here", agentsIn.length);
     };
+    PairingService.prototype.networkPair = function (agentsIn) {
+        var agentA = agentsIn[Math.floor(Math.random() * agentsIn.length)];
+        var edgeWeight = this.config.network.networkPair.edgeWeight;
+        var agents = agentsIn.filter(function (agent) { return agentA.id !== agent.id; });
+        // distanz errechnen die der Agent läuft.
+        var distance = 1;
+        for (var i = 0; i < this.config.simulationData.agents; i++) {
+            if (Math.random() > edgeWeight) {
+                distance++;
+            }
+            else {
+                break;
+            }
+        }
+        if (this.config.network.networkPair.circleAroundDistance) {
+            var _loop_3 = function (index) {
+                if (distance - index > 0) {
+                    var id_1 = this_3.networkService.findNodeIDWithDistanceOf(agentA, agents, distance - index);
+                    if (id_1 != null) {
+                        return { value: {
+                                agentA: agentA,
+                                agentB: agentsIn.find(function (agent) { return agent.id === id_1; })
+                            } };
+                    }
+                }
+                var id = this_3.networkService.findNodeIDWithDistanceOf(agentA, agents, distance - index);
+                if (id != null) {
+                    return { value: {
+                            agentA: agentA,
+                            agentB: agentsIn.find(function (agent) { return agent.id === id; })
+                        } };
+                }
+            };
+            var this_3 = this;
+            // "umkreisen"
+            for (var index = 1; index < agents.length - distance; index++) {
+                var state_3 = _loop_3(index);
+                if (typeof state_3 === "object")
+                    return state_3.value;
+            }
+        }
+        // durchsuche alle weiter weg
+        if (this.config.network.networkPair.increaseFurther) {
+            var _loop_4 = function (index) {
+                var id = this_4.networkService.findNodeIDWithDistanceOf(agentA, agents, index);
+                if (id != null) {
+                    return { value: {
+                            agentA: agentA,
+                            agentB: agentsIn.find(function (agent) { return agent.id === id; })
+                        } };
+                }
+            };
+            var this_4 = this;
+            for (var index = distance; index < agents.length; index++) {
+                var state_4 = _loop_4(index);
+                if (typeof state_4 === "object")
+                    return state_4.value;
+            }
+        }
+        // durchsuche alle näheren
+        if (this.config.network.networkPair.decreaseFurther) {
+            var _loop_5 = function (index) {
+                var id = this_5.networkService.findNodeIDWithDistanceOf(agentA, agents, index);
+                if (id != null) {
+                    return { value: {
+                            agentA: agentA,
+                            agentB: agentsIn.find(function (agent) { return agent.id === id; })
+                        } };
+                }
+            };
+            var this_5 = this;
+            for (var index = distance - 1; index > 0; index--) {
+                var state_5 = _loop_5(index);
+                if (typeof state_5 === "object")
+                    return state_5.value;
+            }
+        }
+        return { agentA: agentA, agentB: null };
+    };
     return PairingService;
 }());
 exports.PairingService = PairingService;

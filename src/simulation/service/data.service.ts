@@ -90,6 +90,10 @@ export class DataService {
     createPopulationInfo(): PopulationInfo {
         return {
           simulationInfo: {
+              name: this.config.simulationData.name,
+              steps: this.config.simulationData.steps,
+              repititions: this.config.simulationData.repititions,
+              agents: this.config.simulationData.agents,
             strategyDistribution: {
               initial: null,
               final: []

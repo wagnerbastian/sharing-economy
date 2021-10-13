@@ -31,6 +31,7 @@ var NetworkService = /** @class */ (function () {
         this.dijkstra = new dijkstra_1.DijkstraService();
         this.graph = [];
         this.distances = [];
+        this.usedSavedDistance = 0;
         this.dataService = new data_service_1.DataService();
     }
     NetworkService.prototype.createGraph = function (agents) {
@@ -104,6 +105,7 @@ var NetworkService = /** @class */ (function () {
                 return d.from === from.id && d.to === t.id;
             });
             if (dis) {
+                _this.usedSavedDistance++;
                 result.push(dis);
             }
             else {
@@ -134,6 +136,12 @@ var NetworkService = /** @class */ (function () {
                 return dis[0].to;
             }
         }
+    };
+    NetworkService.prototype.getNeighbourIDs = function (id) {
+        var neighbours = this.graph.find(function (a) { return a.id === id; }).neighbours;
+        var result = [];
+        neighbours.forEach(function (n) { result.push(n.id); });
+        return result;
     };
     return NetworkService;
 }());

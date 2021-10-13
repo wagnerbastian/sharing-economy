@@ -15,3 +15,8 @@ export class Agent {
     }
 
 }
+
+export interface AgentPair {
+    agentA: Agent;
+    agentB: Agent;
+}
