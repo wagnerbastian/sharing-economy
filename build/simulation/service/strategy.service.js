@@ -22,31 +22,33 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.StrategyService = void 0;
 var data = __importStar(require("../../config.json"));
 var StrategyService = /** @class */ (function () {
-    function StrategyService(populationInfo) {
+    function StrategyService(populationInfo, communicationService) {
         this.populationInfo = populationInfo;
+        this.communicationService = communicationService;
         this.config = data.default;
     }
-    StrategyService.prototype.computeStrategySwitch = function (agentA, agentB) {
+    StrategyService.prototype.computeStrategySwitch = function (agentA, agentB, initialAgents) {
         switch (this.config.strategy.decisionMethod) {
             case 'best': {
-                return this.strategySwitchBest(agentA, agentB);
+                return this.strategySwitchBest(agentA, agentB, initialAgents);
             }
             case 'original-wealth': {
-                return this.strategySwitchOriginalWealth(agentA, agentB);
+                return this.strategySwitchOriginalWealth(agentA, agentB, initialAgents);
             }
         }
     };
-    StrategyService.prototype.strategySwitchOriginalWealth = function (agentA, agentB) {
+    StrategyService.prototype.strategySwitchOriginalWealth = function (agentA, agentB, initialAgents) {
         var wealthA = agentA.wealth - agentA.payoffHistory[agentA.payoffHistory.length - 1];
         var wealthB = agentB.wealth - agentB.payoffHistory[agentB.payoffHistory.length - 1];
         var prob = Math.max(0, wealthB - wealthA) /
             (this.populationInfo.possibleWealth.individual.max - this.populationInfo.possibleWealth.individual.min);
+        prob += this.getCommunicationModifier(agentA, agentB, prob, initialAgents);
         return Math.random() < prob;
     };
     /**
      * Vergleicht die beiden Reichtümer vor dem Handel und falls B reicher ist wird true zurück gegeben.
      */
-    StrategyService.prototype.strategySwitchBest = function (agentA, agentB) {
+    StrategyService.prototype.strategySwitchBest = function (agentA, agentB, initialAgents) {
         var wealthA = agentA.wealth - agentA.payoffHistory[agentA.payoffHistory.length - 1];
         var wealthB = agentB.wealth - agentB.payoffHistory[agentB.payoffHistory.length - 1];
         return wealthB > wealthA;
@@ -57,6 +59,49 @@ var StrategyService = /** @class */ (function () {
             result[agent.strategy.name]++;
         });
         return result;
+    };
+    StrategyService.prototype.getCommunicationModifier = function (agentA, agentB, prob, initialAgents) {
+        var _this = this;
+        if ((prob === 0 && !this.config.communication.modifyAlways) || !this.config.communication.enabled) {
+            return 0;
+        }
+        var neighbours = initialAgents.filter(function (agent) { return _this.communicationService.getNeighbourIDs(agentA.id).includes(agent.id) && agentA.id !== agent.id; });
+        var maxStrategies = [];
+        var tp = 0;
+        var tc = 0;
+        var uc = 0;
+        var up = 0;
+        neighbours.forEach(function (neighbour) {
+            if (neighbour.strategy.name === 'tc') {
+                tc++;
+            }
+            else if (neighbour.strategy.name === 'tp') {
+                tp++;
+            }
+            else if (neighbour.strategy.name === 'up') {
+                up++;
+            }
+            else if (neighbour.strategy.name === 'uc') {
+                uc++;
+            }
+        });
+        var max = Math.max(tp, tc, uc, up);
+        if (tc === max) {
+            maxStrategies.push('tc');
+        }
+        if (tp === max) {
+            maxStrategies.push('tp');
+        }
+        if (up === max) {
+            maxStrategies.push('up');
+        }
+        if (uc === max) {
+            maxStrategies.push('uc');
+        }
+        if (maxStrategies.includes(initialAgents.find(function (agent) { return agent.id === agentB.id; }).strategy.name)) {
+            return this.config.communication.modifier;
+        }
+        return 0;
     };
     return StrategyService;
 }());

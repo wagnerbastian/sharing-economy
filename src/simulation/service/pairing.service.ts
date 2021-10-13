@@ -11,11 +11,12 @@ import * as data from '../../config.json';
 import {
     Config
 } from "../module";
+import { Logger } from "../util";
 
 export class PairingService {
     config = (data as any).default as Config;
     dataService = new DataService();
-
+    logger = new Logger();
     constructor(private networkService: NetworkService) {}
 
     simplePair(agents: Agent[]): {
@@ -35,6 +36,7 @@ export class PairingService {
     }
 
     dijkstraPair(agentsIn: Agent[], step: number): AgentPair {
+        this.logger.inline(' ')
         const preferredDistance = this.config.network.dijkstra.preferredDistance;
         const maxDistance = this.config.network.dijkstra.maxDistance;
         const agentA = agentsIn[Math.floor(Math.random() * agentsIn.length)];
@@ -71,6 +73,7 @@ export class PairingService {
     }
 
     networkPair(agentsIn: Agent[]): AgentPair {
+        this.logger.inline(' ')
         const agentA = agentsIn[Math.floor(Math.random() * agentsIn.length)];
         const edgeWeight = this.config.network.networkPair.edgeWeight;
         const agents = agentsIn.filter(agent => agentA.id !== agent.id);

@@ -44,6 +44,9 @@ var Logger = /** @class */ (function () {
     Logger.prototype.write = function (data, name) {
         fs.writeFile(name, JSON.stringify(data), function () { });
     };
+    Logger.prototype.inline = function (data) {
+        process.stdout.write(data);
+    };
     return Logger;
 }());
 exports.Logger = Logger;

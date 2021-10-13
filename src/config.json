@@ -1,7 +1,7 @@
 {
     "simulationData": {
-        "agents": 10,
-        "steps": 50,
+        "agents": 500,
+        "steps": 10,
         "repititions": 1,
         "name": "Run Tests"
     },
@@ -26,7 +26,7 @@
         "enabled": false,
         "minNeighbours": 3,
         "maxNeighbours": 15,
-        
+
         "dijkstra": {
             "preferredDistance": 1,
             "maxDistance": 5
@@ -37,5 +37,12 @@
             "decreaseFurther": false,
             "circleAroundDistance": true
         }
+    },
+    "communication": {
+        "enabled": true,
+        "minNeighbours": 5,
+        "maxNeighbours": 20,
+        "modifier": 0.1,
+        "modifyAlways": true
     }
 }

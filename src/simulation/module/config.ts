@@ -34,6 +34,13 @@ export interface Config {
             decreaseFurther: boolean,
             circleAroundDistance: boolean
         }
+    },
+    communication: {
+        enabled: boolean,
+        minNeighbours: number,
+        maxNeighbours: number,
+        modifier: number,
+        modifyAlways: boolean
     }
 }
 

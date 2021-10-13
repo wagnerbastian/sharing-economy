@@ -2,14 +2,14 @@ const fs = require("fs");
 export class Logger {
 
     system(data: string): void {
-        console.log('- ' + data);
+        console.log(new Date().toISOString() + ' - ' + data);
     }
 
 
     logStep(step: number): void {
         if (step === 1) {
             console.log('');
-            process.stdout.write(`Calculating steps:.`);
+            process.stdout.write(`${new Date().toISOString()}: Calculating steps:.`);
         } else if (step < 10) {
             process.stdout.write(`.`);
         } else if (step === 10) {
@@ -42,5 +42,9 @@ export class Logger {
 
     write(data: any, name: string): void {
         fs.writeFile(name, JSON.stringify(data), function(){})
+    }
+
+    inline(data: string): void {
+        process.stdout.write(data);
     }
 }

@@ -1,7 +1,7 @@
 {
     "simulationData": {
-        "agents": 100,
-        "steps": 50,
+        "agents": 500,
+        "steps": 10,
         "repititions": 1,
         "name": "Run Tests"
     },
@@ -36,5 +36,12 @@
             "decreaseFurther": false,
             "circleAroundDistance": true
         }
+    },
+    "communication": {
+        "enabled": true,
+        "minNeighbours": 5,
+        "maxNeighbours": 20,
+        "modifier": 0.1,
+        "modifyAlways": true
     }
 }
