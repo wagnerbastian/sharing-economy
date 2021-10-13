@@ -1,6 +1,6 @@
 {
     "simulationData": {
-        "agents": 50,
+        "agents": 100,
         "steps": 50,
         "repititions": 1,
         "name": "Run Tests"

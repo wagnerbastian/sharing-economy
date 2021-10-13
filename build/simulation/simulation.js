@@ -176,7 +176,8 @@ var Simulation = /** @class */ (function () {
         this.populationInfo.simulationInfo.durationMinutes = this.populationInfo.simulationInfo.duration / 60;
         this.populationInfo.simulationInfo.durationHours = this.populationInfo.simulationInfo.durationMinutes / 60;
         this.logger.writeFile(this.populationInfo);
-        console.log("Connections saved: ", this.networkService.distances.length, "used saved: ", this.networkService.usedSavedDistance);
+        // console.log("Connections saved: ", this.networkService.distances.length, "used saved: ", this.networkService.usedSavedDistance);
+        // this.logger.write(this.networkService.distances, 'distances.json')
     };
     /**
      * Setzt alle Agenten auf verfügbar.

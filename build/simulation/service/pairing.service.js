@@ -118,7 +118,7 @@ var PairingService = /** @class */ (function () {
                     return state_3.value;
             }
         }
-        // durchsuche alle weiter weg
+        // durchsuche alle weiter entfernten
         if (this.config.network.networkPair.increaseFurther) {
             var _loop_4 = function (index) {
                 var id = this_4.networkService.findNodeIDWithDistanceOf(agentA, agents, index);

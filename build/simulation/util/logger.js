@@ -41,6 +41,9 @@ var Logger = /** @class */ (function () {
         result.strategyDistribution = [];
         fs.writeFile("result.json", JSON.stringify(result), function () { });
     };
+    Logger.prototype.write = function (data, name) {
+        fs.writeFile(name, JSON.stringify(data), function () { });
+    };
     return Logger;
 }());
 exports.Logger = Logger;

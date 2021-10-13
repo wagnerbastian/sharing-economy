@@ -69,8 +69,8 @@ var NetworkService = /** @class */ (function () {
                             distance: 1
                         });
                         this_1.distances.push({
-                            to: this_1.graph[index].id,
                             from: possibleNeighbours[i].id,
+                            to: this_1.graph[index].id,
                             distance: 1
                         });
                     }
@@ -112,8 +112,8 @@ var NetworkService = /** @class */ (function () {
                 // neu...
                 var distance = _this.dijkstra.findShortestPath(_this.distanceGraph, from.id, t.id);
                 var d = {
-                    to: t.id,
                     from: from.id,
+                    to: t.id,
                     distance: distance.distance
                 };
                 var dInverse = {
