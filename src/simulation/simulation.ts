@@ -5,31 +5,22 @@ import {
     PopulationInfo,
     Strategy
 } from './module';
-import {
-    NetworkService
-} from './network/network.service';
-import {
-    DataService
-} from './service/data.service';
-import {
-    PairingService
-} from './service/pairing.service';
-import {
-    StrategyService
-} from './service/strategy.service';
-import {
-    Logger
-} from './util/logger';
+import { NetworkService, CommunicationService } from './network';
+import { DataService, PairingService, StrategyService } from './service';
+import { Analyzer } from './util/analyzer';
+import { Logger } from './util/logger';
 
 export class Simulation {
     logger = new Logger();
     config = (data as any).default as Config;
+    analyzer = new Analyzer();
     dataService = new DataService();
     populationInfo: PopulationInfo = this.dataService.createPopulationInfo();
 
     networkService = new NetworkService();
+    communicationService = new CommunicationService();
     pairingService = new PairingService(this.networkService);
-    strategyService = new StrategyService(this.populationInfo);
+    strategyService = new StrategyService(this.populationInfo, this.communicationService);
 
 
     strategies: Strategy[] = this.dataService.createStrategies();
@@ -42,8 +33,9 @@ export class Simulation {
 
 
     runSimulation(): void {
-        this.logger.system(`Starting Simulation: ${this.config.simulationData.name} with ${this.config.simulationData.agents} agents`);
+        this.logger.system(`Starting Simulation: ${this.config.simulationData.name} with ${this.config.simulationData.agents} agents, Communication: ${this.config.communication.enabled}`);
         this.networkService.createGraph(this.agents);
+        this.communicationService.createCommunicationGraph(this.agents);
 
         this.populationInfo.simulationInfo.strategyDistribution.initial = this.strategyService.getStrategyDistribution(this.agents);
 
@@ -56,6 +48,7 @@ export class Simulation {
             const agents: Agent[] = JSON.parse(JSON.stringify(this.agents));
 
             for (let step = 1; step <= this.config.simulationData.steps; step++) {
+                this.logger.logStep(step);
                 // console.log("- Starting Step", step);
                 this.makeAllAgentsAvailableForTrading(agents);
                 const agentsAtTheBeginningOfTheStep: Agent[] = JSON.parse(JSON.stringify(agents)) as Agent[];
@@ -80,12 +73,12 @@ export class Simulation {
                             this.trade(agentsToTrade.agentA, agentsToTrade.agentB);
 
                             // strategiewechsel berechnen...
-                            if (this.strategyService.computeStrategySwitch(agentsToTrade.agentA, agentsToTrade.agentB)) {
+                            if (this.strategyService.computeStrategySwitch(agentsToTrade.agentA, agentsToTrade.agentB, agentsAtTheBeginningOfTheStep)) {
                                 // a switcht zu b
                                 agentsToTrade.agentA.strategy = agentsAtTheBeginningOfTheStep.find(agent => agent.id === agentsToTrade.agentB.id).strategy;
                             }
 
-                            if (this.strategyService.computeStrategySwitch(agentsToTrade.agentB, agentsToTrade.agentA)) {
+                            if (this.strategyService.computeStrategySwitch(agentsToTrade.agentB, agentsToTrade.agentA, agentsAtTheBeginningOfTheStep)) {
                                 // b switcht zu a
                                 agentsToTrade.agentB.strategy = agentsAtTheBeginningOfTheStep.find(agent => agent.id === agentsToTrade.agentA.id).strategy;
                             }
@@ -116,12 +109,12 @@ export class Simulation {
                                 this.trade(agentsToTrade.agentA, agentsToTrade.agentB);
 
                                 // strategiewechsel berechnen...
-                                if (this.strategyService.computeStrategySwitch(agentsToTrade.agentA, agentsToTrade.agentB)) {
+                                if (this.strategyService.computeStrategySwitch(agentsToTrade.agentA, agentsToTrade.agentB, agentsAtTheBeginningOfTheStep)) {
                                     // a switcht zu b
                                     agentsToTrade.agentA.strategy = agentsAtTheBeginningOfTheStep.find(agent => agent.id === agentsToTrade.agentB.id).strategy;
                                 }
 
-                                if (this.strategyService.computeStrategySwitch(agentsToTrade.agentB, agentsToTrade.agentA)) {
+                                if (this.strategyService.computeStrategySwitch(agentsToTrade.agentB, agentsToTrade.agentA, agentsAtTheBeginningOfTheStep)) {
                                     // b switcht zu a
                                     agentsToTrade.agentB.strategy = agentsAtTheBeginningOfTheStep.find(agent => agent.id === agentsToTrade.agentA.id).strategy;
                                 }
@@ -158,12 +151,12 @@ export class Simulation {
                                 this.trade(agentsToTrade.agentA, agentsToTrade.agentB);
 
                                 // strategiewechsel berechnen...
-                                if (this.strategyService.computeStrategySwitch(agentsToTrade.agentA, agentsToTrade.agentB)) {
+                                if (this.strategyService.computeStrategySwitch(agentsToTrade.agentA, agentsToTrade.agentB, agentsAtTheBeginningOfTheStep)) {
                                     // a switcht zu b
                                     agentsToTrade.agentA.strategy = agentsAtTheBeginningOfTheStep.find(agent => agent.id === agentsToTrade.agentB.id).strategy;
                                 }
 
-                                if (this.strategyService.computeStrategySwitch(agentsToTrade.agentB, agentsToTrade.agentA)) {
+                                if (this.strategyService.computeStrategySwitch(agentsToTrade.agentB, agentsToTrade.agentA, agentsAtTheBeginningOfTheStep)) {
                                     // b switcht zu a
                                     agentsToTrade.agentB.strategy = agentsAtTheBeginningOfTheStep.find(agent => agent.id === agentsToTrade.agentA.id).strategy;
                                 }
@@ -178,7 +171,7 @@ export class Simulation {
 
                 // PopulationInfo updaten
                 this.updatePopulationInfo(step, agents, repitition);
-                this.logger.logStep(step);
+                
             }
             // Ende des Durchlaufs
             console.log('\n', this.strategyService.getStrategyDistribution(agents));
@@ -189,6 +182,8 @@ export class Simulation {
 
         this.populationInfo.simulationInfo.durationMinutes = this.populationInfo.simulationInfo.duration / 60;
         this.populationInfo.simulationInfo.durationHours = this.populationInfo.simulationInfo.durationMinutes / 60;
+
+        this.analyzer.analyzeRun(this.populationInfo);
         this.logger.writeFile(this.populationInfo);
         // console.log("Connections saved: ", this.networkService.distances.length, "used saved: ", this.networkService.usedSavedDistance);
         // this.logger.write(this.networkService.distances, 'distances.json')

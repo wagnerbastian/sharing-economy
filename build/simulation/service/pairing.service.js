@@ -22,11 +22,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.PairingService = void 0;
 var data_service_1 = require("./data.service");
 var data = __importStar(require("../../config.json"));
+var util_1 = require("../util");
 var PairingService = /** @class */ (function () {
     function PairingService(networkService) {
         this.networkService = networkService;
         this.config = data.default;
         this.dataService = new data_service_1.DataService();
+        this.logger = new util_1.Logger();
     }
     PairingService.prototype.simplePair = function (agents) {
         var a = agents[Math.floor(Math.random() * agents.length)];
@@ -38,6 +40,7 @@ var PairingService = /** @class */ (function () {
         };
     };
     PairingService.prototype.dijkstraPair = function (agentsIn, step) {
+        this.logger.inline(' ');
         var preferredDistance = this.config.network.dijkstra.preferredDistance;
         var maxDistance = this.config.network.dijkstra.maxDistance;
         var agentA = agentsIn[Math.floor(Math.random() * agentsIn.length)];
@@ -78,6 +81,7 @@ var PairingService = /** @class */ (function () {
         console.log("ended here", agentsIn.length);
     };
     PairingService.prototype.networkPair = function (agentsIn) {
+        this.logger.inline(' ');
         var agentA = agentsIn[Math.floor(Math.random() * agentsIn.length)];
         var edgeWeight = this.config.network.networkPair.edgeWeight;
         var agents = agentsIn.filter(function (agent) { return agentA.id !== agent.id; });

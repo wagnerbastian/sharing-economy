@@ -1,28 +1,38 @@
 {
     "simulationInfo": {
         "name": "Run Tests",
-        "steps": 50,
-        "repititions": 1,
-        "agents": 10,
+        "steps": 500,
+        "repititions": 3,
+        "agents": 800,
         "strategyDistribution": {
             "initial": {
-                "tc": 2,
-                "tp": 3,
-                "uc": 2,
-                "up": 3
+                "tc": 200,
+                "tp": 200,
+                "uc": 200,
+                "up": 200
             },
             "final": [{
-                "tc": 6,
-                "tp": 4,
-                "uc": 0,
-                "up": 0
+                "tc": 300,
+                "tp": 125,
+                "uc": 367,
+                "up": 8
+            }, {
+                "tc": 276,
+                "tp": 155,
+                "uc": 308,
+                "up": 61
+            }, {
+                "tc": 221,
+                "tp": 96,
+                "uc": 280,
+                "up": 203
             }]
         },
-        "start": "2021-10-13T10:00:06.750Z",
-        "end": "2021-10-13T10:00:06.971Z",
-        "duration": 0.221,
-        "durationMinutes": 0.003683333333333333,
-        "durationHours": 0.00006138888888888889
+        "start": "2021-10-13T12:54:54.153Z",
+        "end": "2021-10-13T12:55:51.484Z",
+        "duration": 57.331,
+        "durationMinutes": 0.9555166666666667,
+        "durationHours": 0.015925277777777778
     },
     "possibleWealth": {
         "total": {
@@ -30,8 +40,8 @@
             "min": 0
         },
         "individual": {
-            "max": 2000,
-            "min": -1000
+            "max": 60000,
+            "min": -30000
         }
     },
     "strategyDistribution": []
