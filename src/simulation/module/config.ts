@@ -3,6 +3,7 @@ export type PairingMethod = 'simple' | 'dijkstra';
 
 export interface Config {
     simulationData: {
+        name: string,
         agents: number,
         steps: number,
         repititions: number
