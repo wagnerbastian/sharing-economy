@@ -15,7 +15,7 @@ export class NetworkService {
     dataService = new DataService();
 
     createGraph(agents: Agent[]): void {
-        
+
         this.logger.system("Building Graph")
         agents.forEach(agent => {
             this.graph.push({
@@ -26,7 +26,7 @@ export class NetworkService {
 
 
         this.setupNeighbours();
-        
+
     }
 
 
@@ -38,7 +38,7 @@ export class NetworkService {
         for (let index = 0; index < this.graph.length; index++) {
             if (this.graph[index].neighbours.length < maxNeighbours) {
                 // Anzahl der Nachbarn zufällig generieren
-            
+
             let possibleNeighbours = this.graph.filter(node => {
                 return node.neighbours.length < maxNeighbours && node.id !== this.graph[index].id;
             });
@@ -67,10 +67,10 @@ export class NetworkService {
                         distance: 1
                     })
                 }
-                
+
             };
             }
-  
+
         }
         this.generateGraphForDijkstraCalculation();
     }
@@ -86,10 +86,10 @@ export class NetworkService {
             graph[node.id] = n;
         })
         this.distanceGraph = graph;
-        this.logger.system("finished Graphbuilding")      
+        this.logger.system("finished Graphbuilding")
     };
 
-    getDistancesForAgents(from: Agent, to: Agent[]): Distance[] {        
+    getDistancesForAgents(from: Agent, to: Agent[]): Distance[] {
         let result: Distance[] = [];
 
         to.forEach(t => {
@@ -100,7 +100,7 @@ export class NetworkService {
             if (dis) {
                 result.push(dis);
             } else {
-                // neu... 
+                // neu...
                 let distance = this.dijkstra.findShortestPath(this.distanceGraph, from.id, t.id);
                 let d: Distance = {
                     to: t.id,

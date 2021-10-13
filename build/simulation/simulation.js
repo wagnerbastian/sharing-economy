@@ -26,7 +26,6 @@ var data_service_1 = require("./service/data.service");
 var pairing_service_1 = require("./service/pairing.service");
 var strategy_service_1 = require("./service/strategy.service");
 var logger_1 = require("./util/logger");
-var cliSpinners = require('cli-spinners');
 var Simulation = /** @class */ (function () {
     function Simulation() {
         this.logger = new logger_1.Logger();
@@ -43,9 +42,8 @@ var Simulation = /** @class */ (function () {
     Simulation.prototype.runSimulation = function () {
         this.logger.system('Starting Simulation');
         this.networkService.createGraph(this.agents);
-        console.log(cliSpinners.dots);
-        // test
-        console.log(this.networkService.getDistancesForAgents(this.agents[2], [this.agents[80], this.agents[45]]));
+        this.populationInfo.simulationInfo.strategyDistribution.initial = this.strategyService.getStrategyDistribution(this.agents);
+        // console.log(this.networkService.getDistancesForAgents(this.agents[2], [this.agents[80], this.agents[45]]));
         // ___
         for (var repitition = 1; repitition <= this.config.simulationData.repititions; repitition++) {
             this.logger.system('Starting Repition ' + repitition);
@@ -125,8 +123,13 @@ var Simulation = /** @class */ (function () {
             }
             // Ende des Durchlaufs
             console.log('\n', this.strategyService.getStrategyDistribution(agents));
-            this.logger.writeFile(this.populationInfo);
+            this.populationInfo.simulationInfo.strategyDistribution.final.push(this.strategyService.getStrategyDistribution(agents));
         }
+        this.populationInfo.simulationInfo.end = new Date().toISOString();
+        this.populationInfo.simulationInfo.duration = (new Date(this.populationInfo.simulationInfo.end).getTime() - new Date(this.populationInfo.simulationInfo.start).getTime()) / 1000;
+        this.populationInfo.simulationInfo.durationMinutes = this.populationInfo.simulationInfo.duration / 60;
+        this.populationInfo.simulationInfo.durationHours = this.populationInfo.simulationInfo.durationMinutes / 60;
+        this.logger.writeFile(this.populationInfo);
     };
     /**
      * Setzt alle Agenten auf verfügbar.

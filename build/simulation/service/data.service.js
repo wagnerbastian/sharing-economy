@@ -101,6 +101,17 @@ var DataService = /** @class */ (function () {
     };
     DataService.prototype.createPopulationInfo = function () {
         return {
+            simulationInfo: {
+                strategyDistribution: {
+                    initial: null,
+                    final: []
+                },
+                start: new Date().toISOString(),
+                end: null,
+                duration: null,
+                durationMinutes: null,
+                durationHours: null
+            },
             possibleWealth: {
                 total: {
                     max: 0,

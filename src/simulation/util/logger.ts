@@ -23,5 +23,10 @@ export class Logger {
 
     writeFile(data: any): void {
         fs.writeFile("run.json", JSON.stringify(data), function(){})
+
+        const result = JSON.parse(JSON.stringify(data));
+        result.strategyDistribution = [];
+        fs.writeFile("result.json", JSON.stringify(result), function(){})
+
     }
 }

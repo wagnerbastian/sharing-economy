@@ -1,0 +1,39 @@
+{
+  "simulationInfo": {
+    "strategyDistribution": {
+      "initial": {
+        "tc": 12,
+        "tp": 13,
+        "uc": 12,
+        "up": 13
+      },
+      "final": [{
+        "tc": 21,
+        "tp": 8,
+        "uc": 14,
+        "up": 7
+      }, {
+        "tc": 18,
+        "tp": 8,
+        "uc": 17,
+        "up": 7
+      }]
+    },
+    "start": "2021-10-12T21:52:28.706Z",
+    "end": "2021-10-12T21:52:29.549Z",
+    "duration": 0.843,
+    "durationMinutes": 0.01405,
+    "durationHours": 0.00023416666666666668
+  },
+  "possibleWealth": {
+    "total": {
+      "max": 0,
+      "min": 0
+    },
+    "individual": {
+      "max": 4000,
+      "min": -2000
+    }
+  },
+  "strategyDistribution": []
+}

@@ -1,9 +1,9 @@
 {
     "simulationData": {
-        "name": "test",
-        "agents": 100,
+        "agents": 50,
         "steps": 50,
-        "repititions": 1
+        "repititions": 1,
+        "name": ""
     },
     "payoff": {
         "r": 39,
