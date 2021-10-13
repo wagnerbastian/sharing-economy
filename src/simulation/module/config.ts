@@ -41,6 +41,9 @@ export interface Config {
         maxNeighbours: number,
         modifier: number,
         modifyAlways: boolean
+    },
+    analysis: {
+        analyseLastPercentage: number
     }
 }
 

@@ -1,0 +1,48 @@
+{
+    "simulationInfo": {
+        "name": "1",
+        "steps": 500,
+        "repititions": 3,
+        "agents": 1200,
+        "strategyDistribution": {
+            "initial": {
+                "tc": 300,
+                "tp": 300,
+                "uc": 300,
+                "up": 300
+            },
+            "final": [{
+                "tc": 389,
+                "tp": 172,
+                "uc": 501,
+                "up": 138
+            }, {
+                "tc": 335,
+                "tp": 174,
+                "uc": 469,
+                "up": 222
+            }, {
+                "tc": 379,
+                "tp": 246,
+                "uc": 403,
+                "up": 172
+            }]
+        },
+        "start": "2021-10-13T13:03:34.203Z",
+        "end": "2021-10-13T13:05:14.509Z",
+        "duration": 100.306,
+        "durationMinutes": 1.6717666666666666,
+        "durationHours": 0.027862777777777778
+    },
+    "possibleWealth": {
+        "total": {
+            "max": 0,
+            "min": 0
+        },
+        "individual": {
+            "max": 60000,
+            "min": -30000
+        }
+    },
+    "strategyDistribution": []
+}

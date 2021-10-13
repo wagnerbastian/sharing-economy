@@ -23,11 +23,13 @@ exports.Simulation = void 0;
 var data = __importStar(require("../config.json"));
 var network_1 = require("./network");
 var service_1 = require("./service");
+var analyzer_1 = require("./util/analyzer");
 var logger_1 = require("./util/logger");
 var Simulation = /** @class */ (function () {
     function Simulation() {
         this.logger = new logger_1.Logger();
         this.config = data.default;
+        this.analyzer = new analyzer_1.Analyzer();
         this.dataService = new service_1.DataService();
         this.populationInfo = this.dataService.createPopulationInfo();
         this.networkService = new network_1.NetworkService();
@@ -175,6 +177,7 @@ var Simulation = /** @class */ (function () {
         this.populationInfo.simulationInfo.duration = (new Date(this.populationInfo.simulationInfo.end).getTime() - new Date(this.populationInfo.simulationInfo.start).getTime()) / 1000;
         this.populationInfo.simulationInfo.durationMinutes = this.populationInfo.simulationInfo.duration / 60;
         this.populationInfo.simulationInfo.durationHours = this.populationInfo.simulationInfo.durationMinutes / 60;
+        this.analyzer.analyzeRun(this.populationInfo);
         this.logger.writeFile(this.populationInfo);
         // console.log("Connections saved: ", this.networkService.distances.length, "used saved: ", this.networkService.usedSavedDistance);
         // this.logger.write(this.networkService.distances, 'distances.json')

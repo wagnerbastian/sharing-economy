@@ -1,8 +1,8 @@
 {
     "simulationData": {
-        "agents": 500,
-        "steps": 10,
-        "repititions": 1,
+        "agents": 800,
+        "steps": 500,
+        "repititions": 3,
         "name": "Run Tests"
     },
     "payoff": {
@@ -21,7 +21,7 @@
         ]
     },
     "network": {
-        "pairingMethod": "network",
+        "pairingMethod": "simple",
         "firstStepSubsetModifier": 5,
         "enabled": false,
         "minNeighbours": 3,
@@ -39,10 +39,13 @@
         }
     },
     "communication": {
-        "enabled": true,
+        "enabled": false,
         "minNeighbours": 5,
         "maxNeighbours": 20,
         "modifier": 0.1,
         "modifyAlways": true
+    },
+    "analysis": {
+        "analyseLastPercentage": 0.25
     }
 }

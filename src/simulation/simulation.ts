@@ -7,11 +7,13 @@ import {
 } from './module';
 import { NetworkService, CommunicationService } from './network';
 import { DataService, PairingService, StrategyService } from './service';
+import { Analyzer } from './util/analyzer';
 import { Logger } from './util/logger';
 
 export class Simulation {
     logger = new Logger();
     config = (data as any).default as Config;
+    analyzer = new Analyzer();
     dataService = new DataService();
     populationInfo: PopulationInfo = this.dataService.createPopulationInfo();
 
@@ -180,6 +182,8 @@ export class Simulation {
 
         this.populationInfo.simulationInfo.durationMinutes = this.populationInfo.simulationInfo.duration / 60;
         this.populationInfo.simulationInfo.durationHours = this.populationInfo.simulationInfo.durationMinutes / 60;
+
+        this.analyzer.analyzeRun(this.populationInfo);
         this.logger.writeFile(this.populationInfo);
         // console.log("Connections saved: ", this.networkService.distances.length, "used saved: ", this.networkService.usedSavedDistance);
         // this.logger.write(this.networkService.distances, 'distances.json')

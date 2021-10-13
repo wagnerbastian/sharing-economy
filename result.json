@@ -1,1 +1,48 @@
-{"simulationInfo":{"name":"Run Tests","steps":100,"repititions":3,"agents":30,"strategyDistribution":{"initial":{"tc":7,"tp":8,"uc":7,"up":8},"final":[{"tc":0,"tp":30,"uc":0,"up":0},{"tc":0,"tp":28,"uc":2,"up":0},{"tc":30,"tp":0,"uc":0,"up":0}]},"start":"2021-10-13T12:02:58.966Z","end":"2021-10-13T12:05:51.262Z","duration":172.296,"durationMinutes":2.8716,"durationHours":0.04786},"possibleWealth":{"total":{"max":0,"min":0},"individual":{"max":12000,"min":-6000}},"strategyDistribution":[]}
+{
+    "simulationInfo": {
+        "name": "Run Tests",
+        "steps": 500,
+        "repititions": 3,
+        "agents": 800,
+        "strategyDistribution": {
+            "initial": {
+                "tc": 200,
+                "tp": 200,
+                "uc": 200,
+                "up": 200
+            },
+            "final": [{
+                "tc": 300,
+                "tp": 125,
+                "uc": 367,
+                "up": 8
+            }, {
+                "tc": 276,
+                "tp": 155,
+                "uc": 308,
+                "up": 61
+            }, {
+                "tc": 221,
+                "tp": 96,
+                "uc": 280,
+                "up": 203
+            }]
+        },
+        "start": "2021-10-13T12:54:54.153Z",
+        "end": "2021-10-13T12:55:51.484Z",
+        "duration": 57.331,
+        "durationMinutes": 0.9555166666666667,
+        "durationHours": 0.015925277777777778
+    },
+    "possibleWealth": {
+        "total": {
+            "max": 0,
+            "min": 0
+        },
+        "individual": {
+            "max": 60000,
+            "min": -30000
+        }
+    },
+    "strategyDistribution": []
+}

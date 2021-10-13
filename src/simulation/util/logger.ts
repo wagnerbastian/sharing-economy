@@ -1,5 +1,10 @@
 const fs = require("fs");
+import * as data from '../../config.json';
+import { Config } from '../module';
+
+
 export class Logger {
+    config = (data as any).default as Config;
 
     system(data: string): void {
         console.log(new Date().toISOString() + ' - ' + data);
@@ -32,11 +37,11 @@ export class Logger {
     }
 
     writeFile(data: any): void {
-        fs.writeFile("run.json", JSON.stringify(data), function(){})
+        fs.writeFile(this.config.simulationData.name + "-run.json", JSON.stringify(data), function(){})
 
         const result = JSON.parse(JSON.stringify(data));
         result.strategyDistribution = [];
-        fs.writeFile("result.json", JSON.stringify(result), function(){})
+        fs.writeFile(this.config.simulationData.name + "-result.json", JSON.stringify(result), function(){})
 
     }
 
