@@ -64,8 +64,8 @@ export class NetworkService {
                         distance: 1
                     })
                     this.distances.push({
-                        to: this.graph[index].id,
                         from: possibleNeighbours[i].id,
+                        to: this.graph[index].id,
                         distance: 1
                     })
                 }
@@ -106,8 +106,8 @@ export class NetworkService {
                 // neu...
                 let distance = this.dijkstra.findShortestPath(this.distanceGraph, from.id, t.id);
                 let d: Distance = {
-                    to: t.id,
                     from: from.id,
+                    to: t.id,
                     distance: distance.distance
                 };
                 let dInverse: Distance = {

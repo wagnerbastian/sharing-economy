@@ -108,7 +108,7 @@ export class PairingService {
             }
         }
 
-        // durchsuche alle weiter weg
+        // durchsuche alle weiter entfernten
         if (this.config.network.networkPair.increaseFurther) {
             for (let index = distance; index < agents.length; index++) {
                 const id = this.networkService.findNodeIDWithDistanceOf(agentA, agents, index);

@@ -39,4 +39,8 @@ export class Logger {
         fs.writeFile("result.json", JSON.stringify(result), function(){})
 
     }
+
+    write(data: any, name: string): void {
+        fs.writeFile(name, JSON.stringify(data), function(){})
+    }
 }
