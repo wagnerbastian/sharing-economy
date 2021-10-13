@@ -73,7 +73,7 @@ export class PairingService {
     }
 
     networkPair(agentsIn: Agent[]): AgentPair {
-        this.logger.inline(' ')
+        // this.logger.inline(' ')
         const agentA = agentsIn[Math.floor(Math.random() * agentsIn.length)];
         const edgeWeight = this.config.network.networkPair.edgeWeight;
         const agents = agentsIn.filter(agent => agentA.id !== agent.id);
@@ -88,9 +88,11 @@ export class PairingService {
             }
         }
 
+        
+        
         if (this.config.network.networkPair.circleAroundDistance) {
             // "umkreisen"
-            for (let index = 1; index < agents.length - distance; index++) {
+            for (let index = 1; index < (agents.length - distance); index++) {
                 if (distance - index > 0) {
                     const id = this.networkService.findNodeIDWithDistanceOf(agentA, agents, distance - index);
                     if (id != null) {
@@ -101,7 +103,7 @@ export class PairingService {
                     }
                 }
 
-                const id = this.networkService.findNodeIDWithDistanceOf(agentA, agents, distance - index);
+                const id = this.networkService.findNodeIDWithDistanceOf(agentA, agents, distance + index);
                     if (id != null) {
                         return {
                             agentA,

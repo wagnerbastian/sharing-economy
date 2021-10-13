@@ -81,7 +81,7 @@ var PairingService = /** @class */ (function () {
         console.log("ended here", agentsIn.length);
     };
     PairingService.prototype.networkPair = function (agentsIn) {
-        this.logger.inline(' ');
+        // this.logger.inline(' ')
         var agentA = agentsIn[Math.floor(Math.random() * agentsIn.length)];
         var edgeWeight = this.config.network.networkPair.edgeWeight;
         var agents = agentsIn.filter(function (agent) { return agentA.id !== agent.id; });
@@ -106,7 +106,7 @@ var PairingService = /** @class */ (function () {
                             } };
                     }
                 }
-                var id = this_3.networkService.findNodeIDWithDistanceOf(agentA, agents, distance - index);
+                var id = this_3.networkService.findNodeIDWithDistanceOf(agentA, agents, distance + index);
                 if (id != null) {
                     return { value: {
                             agentA: agentA,
@@ -116,7 +116,7 @@ var PairingService = /** @class */ (function () {
             };
             var this_3 = this;
             // "umkreisen"
-            for (var index = 1; index < agents.length - distance; index++) {
+            for (var index = 1; index < (agents.length - distance); index++) {
                 var state_3 = _loop_3(index);
                 if (typeof state_3 === "object")
                     return state_3.value;

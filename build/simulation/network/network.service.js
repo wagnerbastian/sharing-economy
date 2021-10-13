@@ -43,9 +43,9 @@ var NetworkService = /** @class */ (function () {
                 neighbours: []
             });
         });
-        this.setupNeighbours();
+        this.setupNeighbours(agents);
     };
-    NetworkService.prototype.setupNeighbours = function () {
+    NetworkService.prototype.setupNeighbours = function (agents) {
         var _this = this;
         this.logger.system("Building Neighbours");
         var minNeighbours = this.config.network.minNeighbours;
@@ -68,11 +68,6 @@ var NetworkService = /** @class */ (function () {
                             to: possibleNeighbours[i].id,
                             distance: 1
                         });
-                        this_1.distances.push({
-                            from: possibleNeighbours[i].id,
-                            to: this_1.graph[index].id,
-                            distance: 1
-                        });
                     }
                 }
                 ;
@@ -82,9 +77,10 @@ var NetworkService = /** @class */ (function () {
         for (var index = 0; index < this.graph.length; index++) {
             _loop_1(index);
         }
-        this.generateGraphForDijkstraCalculation();
+        this.generateGraphForDijkstraCalculation(agents);
     };
-    NetworkService.prototype.generateGraphForDijkstraCalculation = function () {
+    NetworkService.prototype.generateGraphForDijkstraCalculation = function (agents) {
+        var _this = this;
         var graph = {};
         this.graph.forEach(function (node) {
             var n = {};
@@ -95,6 +91,18 @@ var NetworkService = /** @class */ (function () {
         });
         this.distanceGraph = graph;
         this.logger.system("finished Graphbuilding");
+        var start = new Date();
+        this.logger.system("Starting Graph Computing... this needs a lot of time...");
+        agents.forEach(function (agent) {
+            process.stdout.write(".");
+            var d = _this.getDistancesForAgents(agent, agents.filter(function (a) { return a.id !== agent.id; }));
+        });
+        var end = new Date();
+        var duration = (end.getTime() - start.getTime()) / 1000;
+        if (duration > 0) {
+            console.log('');
+        }
+        this.logger.system("Finished Graph Computing. Duration: " + duration);
     };
     ;
     NetworkService.prototype.getDistancesForAgents = function (from, to) {
@@ -102,7 +110,7 @@ var NetworkService = /** @class */ (function () {
         var result = [];
         to.forEach(function (t) {
             var dis = _this.distances.find(function (d) {
-                return d.from === from.id && d.to === t.id;
+                return (d.from === from.id && d.to === t.id) || (d.to === from.id && d.from === t.id);
             });
             if (dis) {
                 _this.usedSavedDistance++;
@@ -116,17 +124,23 @@ var NetworkService = /** @class */ (function () {
                     to: t.id,
                     distance: distance.distance
                 };
-                var dInverse = {
-                    from: t.id,
-                    to: from.id,
-                    distance: distance.distance
-                };
                 _this.distances.push(d);
-                _this.distances.push(dInverse);
                 result.push(d);
+                if (d.distance > 2) {
+                    _this.saveMiddleDistance(from.id, distance);
+                }
             }
         });
         return result;
+    };
+    NetworkService.prototype.saveMiddleDistance = function (from, distance) {
+        for (var d = 1; d < distance.path.length - 1; d++) {
+            this.distances.push({
+                from: from,
+                to: Number(distance.path[d]),
+                distance: d + 1,
+            });
+        }
     };
     NetworkService.prototype.findNodeIDWithDistanceOf = function (from, availableAgentsIn, distance) {
         var availableAgents = this.dataService.shuffleArray(JSON.parse(JSON.stringify(availableAgentsIn)));

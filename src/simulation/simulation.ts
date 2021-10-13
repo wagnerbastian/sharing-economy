@@ -48,7 +48,7 @@ export class Simulation {
             const agents: Agent[] = JSON.parse(JSON.stringify(this.agents));
 
             for (let step = 1; step <= this.config.simulationData.steps; step++) {
-                this.logger.logStep(step);
+                // this.logger.logStep(step);
                 // console.log("- Starting Step", step);
                 this.makeAllAgentsAvailableForTrading(agents);
                 const agentsAtTheBeginningOfTheStep: Agent[] = JSON.parse(JSON.stringify(agents)) as Agent[];
@@ -96,6 +96,8 @@ export class Simulation {
 
                             let agentsToTrade = this.pairingService.dijkstraPair(availableAgents, step);
                             if (agentsToTrade.agentA == null || agentsToTrade.agentB == null) {
+                                
+                                
                                 // es wurde kein gültiges Paar gefunden, Agent bricht den Handel ab.
                                 if (agentsToTrade.agentA) {
                                     agentsToTrade.agentA.didTradeInThisStep = true;
@@ -129,13 +131,15 @@ export class Simulation {
 
                     case 'network': {
                         let availableAgentsCounter = agents.length;
-                        while (availableAgentsCounter > 3) {
+                        while (availableAgentsCounter > 2) {
                             let availableAgents = agents.filter(agent => !agent.didTradeInThisStep);
                             availableAgentsCounter = availableAgents.length;
+                            
                             const agentsToTrade = this.pairingService.networkPair(agents);
 
 
                             if (agentsToTrade.agentA == null || agentsToTrade.agentB == null) {
+                                
                                 // es wurde kein gültiges Paar gefunden, Agent bricht den Handel ab.
                                 if (agentsToTrade.agentA) {
                                     agentsToTrade.agentA.didTradeInThisStep = true;
@@ -146,6 +150,7 @@ export class Simulation {
                                 }
 
                             } else {
+                                
                                 // Es wurde ein gültiges paar gefunden und es handelt
                                 // Handel
                                 this.trade(agentsToTrade.agentA, agentsToTrade.agentB);
@@ -164,6 +169,7 @@ export class Simulation {
                             }
 
                         }
+                        // console.log('ind' + indicator)
                         break;
                     }
                 }

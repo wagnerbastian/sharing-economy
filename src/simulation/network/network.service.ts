@@ -27,12 +27,12 @@ export class NetworkService {
         });
 
 
-        this.setupNeighbours();
+        this.setupNeighbours(agents);
 
     }
 
 
-    setupNeighbours(): void {
+    setupNeighbours(agents: Agent[]): void {
         this.logger.system("Building Neighbours")
         const minNeighbours = this.config.network.minNeighbours;
         const maxNeighbours = this.config.network.maxNeighbours;
@@ -63,21 +63,16 @@ export class NetworkService {
                         to: possibleNeighbours[i].id,
                         distance: 1
                     })
-                    this.distances.push({
-                        from: possibleNeighbours[i].id,
-                        to: this.graph[index].id,
-                        distance: 1
-                    })
                 }
 
             };
             }
 
         }
-        this.generateGraphForDijkstraCalculation();
+        this.generateGraphForDijkstraCalculation(agents);
     }
 
-    generateGraphForDijkstraCalculation(): void {
+    generateGraphForDijkstraCalculation(agents: Agent[]): void {
         let graph: any = {};
 
         this.graph.forEach(node => {
@@ -88,7 +83,21 @@ export class NetworkService {
             graph[node.id] = n;
         })
         this.distanceGraph = graph;
-        this.logger.system("finished Graphbuilding")
+        this.logger.system("finished Graphbuilding");
+
+        const start = new Date();
+        this.logger.system("Starting Graph Computing... this needs a lot of time...")
+        agents.forEach(agent => {
+            process.stdout.write(`.`);
+            const d = this.getDistancesForAgents(agent, agents.filter(a => a.id !== agent.id));
+        });
+        const end = new Date();
+        const duration = (end.getTime() - start.getTime()) / 1000;
+        if (duration > 0) {
+            console.log('');
+        }
+        
+        this.logger.system("Finished Graph Computing. Duration: " + duration);
     };
 
     getDistancesForAgents(from: Agent, to: Agent[]): Distance[] {
@@ -96,7 +105,7 @@ export class NetworkService {
 
         to.forEach(t => {
             let dis = this.distances.find(d => {
-                return d.from === from.id && d.to === t.id;
+                return (d.from === from.id && d.to === t.id) || (d.to === from.id && d.from === t.id) ;
             });
 
             if (dis) {
@@ -110,17 +119,25 @@ export class NetworkService {
                     to: t.id,
                     distance: distance.distance
                 };
-                let dInverse: Distance = {
-                    from: t.id,
-                    to: from.id,
-                    distance: distance.distance
-                };
                 this.distances.push(d);
-                this.distances.push(dInverse);
                 result.push(d);
+
+                if (d.distance > 2) {
+                    this.saveMiddleDistance(from.id, distance)
+                }
             }
         })
         return result;
+    }
+
+    private saveMiddleDistance(from: number, distance: any) {
+        for (let d = 1; d < distance.path.length - 1; d++) {
+            this.distances.push({
+                from,
+                to: Number(distance.path[d]),
+                distance: d+1,
+            });            
+        }
     }
 
     findNodeIDWithDistanceOf(from: Agent, availableAgentsIn: Agent[], distance: number): number {

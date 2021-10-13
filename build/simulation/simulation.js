@@ -52,7 +52,7 @@ var Simulation = /** @class */ (function () {
             // agenten für jeden Durchlauf kopieren damit man ein neues Set hat
             var agents = JSON.parse(JSON.stringify(this.agents));
             for (var step = 1; step <= this.config.simulationData.steps; step++) {
-                this.logger.logStep(step);
+                // this.logger.logStep(step);
                 // console.log("- Starting Step", step);
                 this.makeAllAgentsAvailableForTrading(agents);
                 var agentsAtTheBeginningOfTheStep = JSON.parse(JSON.stringify(agents));
@@ -160,9 +160,10 @@ var Simulation = /** @class */ (function () {
                             }
                         };
                         var this_3 = this;
-                        while (availableAgentsCounter > 3) {
+                        while (availableAgentsCounter > 2) {
                             _loop_3();
                         }
+                        // console.log('ind' + indicator)
                         break;
                     }
                 }
